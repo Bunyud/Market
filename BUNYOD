@@ -1,0 +1,37 @@
+from telegram import Update, Bot
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+# 6798291892:AAE6Dqq48zuBMxuDVoTnHCQZGScMnGQfo9o
+
+# /start komandasi uchun handler funksiyasi
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Salom! Men sizning botingizman!')
+
+# /help komandasi uchun handler funksiyasi
+def help_command(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Men yordam bera oladigan komandalar:\n/start - Botni ishga tushirish\n/help - Yordam olish')
+
+# Matnli xabarlar uchun handler funksiyasi
+def echo(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text(f'Siz yuborgan xabar: {update.message.text}')
+
+def main() -> None:
+    # Updater va Dispatcherni yarating
+    updater = Updater(TOKEN)
+
+    dispatcher = updater.dispatcher
+
+    # /start va /help komandalarini qo'shing
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("help", help_command))
+
+    # Barcha matnli xabarlar uchun echo 63ii3
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    
+    updater.start_polling()
+
+    
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
